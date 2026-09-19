@@ -1,0 +1,589 @@
+/* ==========================================================================
+   Question Paper Generator — styles.css
+   Optimised build:
+     • CSS custom properties for all repeated values (colours, sizes, spacing)
+     • Consolidated selectors (no duplicated declarations)
+     • Sectioned and commented for maintainability
+     • Print + html2pdf compatible
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DESIGN TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+  /* Brand palette */
+  --c-primary:        #3b6df0;
+  --c-primary-hover:  #2f5ce0;
+  --c-primary-focus:  #4f7cff;
+  --c-primary-ring:   rgba(79, 124, 255, 0.18);
+
+  /* Dark chrome */
+  --c-topbar:         #111827;
+  --c-sidebar:        #1b2434;
+  --c-card:           #232f42;
+  --c-card-border:    #2f3d54;
+  --c-input-bg:       #151d2b;
+  --c-input-border:   #34435c;
+  --c-hover-row:      #1e293b;
+
+  /* Text on dark */
+  --c-text:           #e6edf7;
+  --c-text-muted:     #9fb0c8;
+  --c-text-dim:       #7d90ab;
+  --c-text-hint-b:    #a9bcd6;
+  --c-chip-bg:        #3b6df0;
+  --c-heading:        #8fa3bf;
+  --c-status:         #8ea3c0;
+
+  /* Light preview */
+  --c-preview-bg:     #e5e7eb;
+  --c-scroll-thumb:   #b6bec9;
+  --c-sidebar-thumb:  #33415a;
+
+  /* Paper */
+  --c-paper-border:   #000;
+  --c-paper-grey:     #f2f2f2;
+  --c-paper-watermark:#c9c9c9;
+  --c-paper-empty:    #888;
+
+  /* Sizing */
+  --radius-sm:        7px;
+  --radius-md:        8px;
+  --radius-lg:        11px;
+  --radius-pill:      20px;
+
+  --topbar-h:         58px;
+  --sidebar-w:        392px;
+
+  --shadow-topbar:    0 2px 10px rgba(0, 0, 0, 0.25);
+  --shadow-sheet:     0 8px 30px rgba(15, 23, 42, 0.20);
+
+  /* Typography */
+  --font-ui:          'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-paper:       'Cambria', 'Times New Roman', Georgia, serif;
+}
+
+/* --------------------------------------------------------------------------
+   2. RESET & BASE
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  background: #eef1f6;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   3. APP SHELL
+   -------------------------------------------------------------------------- */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ---------- Topbar ---------- */
+.topbar {
+  flex: none;
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  background: var(--c-topbar);
+  color: #fff;
+  box-shadow: var(--shadow-topbar);
+  z-index: 5;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status {
+  margin-right: 4px;
+  font-size: 12px;
+  color: var(--c-status);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--c-primary);
+  color: #fff;
+  font: 600 13px var(--font-ui);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn:hover      { background: var(--c-primary-hover); }
+.btn:disabled   { opacity: 0.65; cursor: progress; }
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #46587a;
+  color: #c9d6e8;
+}
+.btn.ghost:hover { background: var(--c-hover-row); }
+
+.btn.small {
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+/* ---------- Main body grid ---------- */
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* --------------------------------------------------------------------------
+   4. SIDEBAR
+   -------------------------------------------------------------------------- */
+.sidebar {
+  flex: none;
+  width: var(--sidebar-w);
+  padding: 14px;
+  overflow-y: auto;
+  background: var(--c-sidebar);
+  color: #dbe3ef;
+  border-right: 1px solid #0d1420;
+}
+.sidebar::-webkit-scrollbar        { width: 9px; }
+.sidebar::-webkit-scrollbar-thumb  { background: var(--c-sidebar-thumb); border-radius: 6px; }
+
+/* ---------- Card ---------- */
+.card {
+  margin-bottom: 12px;
+  padding: 13px;
+  background: var(--c-card);
+  border: 1px solid var(--c-card-border);
+  border-radius: var(--radius-lg);
+}
+
+.card h3 {
+  margin: 0 0 11px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-heading);
+}
+
+/* ---------- Form elements ---------- */
+label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--c-text-muted);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  margin-top: 5px;
+  padding: 7px 9px;
+  background: var(--c-input-bg);
+  border: 1px solid var(--c-input-border);
+  border-radius: var(--radius-sm);
+  color: var(--c-text);
+  font: 13px var(--font-ui);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--c-primary-focus);
+  box-shadow: 0 0 0 2px var(--c-primary-ring);
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.45;
+}
+
+input[type="file"]  { padding: 6px; font-size: 11.5px; }
+
+input[type="range"] {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+input[type="range"]:focus { box-shadow: none; }
+
+/* ---------- Rows & checkboxes ---------- */
+.row {
+  display: flex;
+  gap: 8px;
+}
+.row > label { flex: 1; min-width: 0; }
+
+.row.gap-top    { margin-top: 9px; }
+.row.gap-bottom { margin-bottom: 11px; }
+
+label.chk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #c3d0e2;
+}
+label.chk input {
+  width: auto;
+  margin: 0;
+  accent-color: var(--c-primary);
+}
+
+/* ---------- Hints ---------- */
+.hint {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--c-text-dim);
+}
+.hint b { color: var(--c-text-hint-b); }
+
+/* ---------- Section cards (sidebar) ---------- */
+.sec-card {
+  margin-bottom: 9px;
+  padding: 10px;
+  background: #1a2433;
+  border: 1px solid #303f57;
+  border-radius: 9px;
+}
+
+.sec-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.chip {
+  flex: none;
+  padding: 3px 9px;
+  background: var(--c-chip-bg);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+}
+
+.sec-name {
+  flex: 1;
+  margin: 0 !important;
+  padding: 4px 8px !important;
+  font-size: 12.5px;
+}
+
+.icon-btn {
+  padding: 2px 6px;
+  background: transparent;
+  border: 0;
+  color: #7c8fab;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.icon-btn:hover {
+  background: #3a2130;
+  color: #ff8080;
+}
+
+.sec-card label      { margin-bottom: 8px; }
+.sec-card .row       { margin-bottom: 0; }
+
+/* --------------------------------------------------------------------------
+   5. PREVIEW PANE
+   -------------------------------------------------------------------------- */
+.preview {
+  flex: 1;
+  padding: 26px;
+  overflow: auto;
+  background: var(--c-preview-bg);
+}
+.preview::-webkit-scrollbar        { width: 11px; height: 11px; }
+.preview::-webkit-scrollbar-thumb  { background: var(--c-scroll-thumb); border-radius: 6px; }
+
+/* --------------------------------------------------------------------------
+   6. A4 SHEET
+   -------------------------------------------------------------------------- */
+.sheet {
+  position: relative;                 /* anchor for watermark */
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 10mm 9mm;
+  background: #fff;
+  border: 1.6px solid var(--c-paper-border);
+  box-shadow: var(--shadow-sheet);
+  overflow: hidden;                   /* keep watermark inside */
+  font: 13px/1.5 var(--font-paper);
+  color: #000;
+}
+
+.sheet-inner {
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+  padding: 8mm 7mm;
+  border: 1px solid var(--c-paper-border);
+}
+
+/* ---------- Diagonal school-name watermark ---------- */
+.p-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  transform-origin: center center;
+  z-index: 0;
+  font: 700 4.4em/1 var(--font-paper);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-paper-watermark);
+  opacity: 0.55;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- Header with left-aligned logo ---------- */
+.p-head {
+  position: relative;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  text-align: center;
+  border-bottom: 2px solid var(--c-paper-border);
+}
+
+.p-head.with-logo {
+  padding-left:  calc(var(--logo-w) + 5mm);
+  padding-right: calc(var(--logo-w) + 5mm);
+  min-height:    var(--logo-w);
+}
+
+.p-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--logo-w);
+  max-height: var(--logo-w);
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.p-school { font-size: 1.55em; font-weight: 700; letter-spacing: 0.4px; line-height: 1.2; }
+.p-exam   { font-size: 1.06em; font-weight: 600; margin-top: 3px; }
+
+.p-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 7px;
+  font-size: 1em;
+}
+
+/* ---------- Student fill-in block ---------- */
+.p-fill {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  margin: 0 0 11px;
+  padding: 0 2px;
+  font-size: 1em;
+  line-height: 1.9;
+}
+
+.p-fill .f-item {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.p-fill .f-item.name { flex: 1 1 52%; }
+.p-fill .f-item.div  { flex: 0 0 22%; }
+.p-fill .f-item.roll { flex: 0 0 22%; }
+.p-fill .f-item.date { flex: 0 0 40%; } 
+
+.p-fill .f-label {
+  font-weight: 600;
+  white-space: nowrap;
+  padding-bottom: 1px;
+}
+
+.p-fill .f-line {
+  flex: 1;
+  min-width: 40px;
+  height: 1.15em;
+  border-bottom: 1px dotted var(--c-paper-border);
+}
+
+
+
+
+/* ---------- General Instructions box ---------- */
+.p-inst {
+  margin-bottom: 13px;
+  padding: 8px 12px;
+  border: 1.3px solid var(--c-paper-border);
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.p-inst-title {
+  margin-bottom: 4px;
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
+.p-inst ol { margin: 0; padding-left: 19px; }
+.p-inst li { margin-bottom: 2px; }
+
+/* ---------- Section tables ---------- */
+.q-table {
+  width: 100%;
+  margin-bottom: 15px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.q-table td,
+.q-table th {
+  padding: 5px 8px;
+  border: 1.2px solid var(--c-paper-border);
+  vertical-align: top;
+}
+
+.q-table col.c-no { width: 4.5%; }
+.q-table col.c-mk { width: 10%; }
+
+.q-table.with-marks col.c-q { width: 85.5%; }
+.q-table.no-marks   col.c-q { width: 95.5%; }
+
+.t-sec {
+  padding: 6px 8px !important;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.02em;
+  letter-spacing: 0.06em;
+  background: var(--c-paper-grey);
+}
+
+.t-mk-h {
+  padding: 6px 8px !important;
+  text-align: center;
+  font-weight: 700;
+  background: var(--c-paper-grey);
+}
+
+.t-desc {
+  padding: 6px 9px !important;
+  font-style: italic;
+  font-size: 0.92em;
+}
+
+.t-no {
+  padding: 5px 4px !important;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-q  { padding: 5px 10px !important; }
+
+.t-mk {
+  padding: 5px 5px !important;
+  text-align: center;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Question body ---------- */
+.q-line { margin: 0 0 2px; }
+
+.q-opts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 18px;
+  margin-top: 4px;
+}
+
+.q-opt {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.q-opt .k { font-weight: 600; flex: none; }
+
+.q-or {
+  margin: 6px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95em;
+  letter-spacing: 2px;
+}
+
+/* ---------- Empty state ---------- */
+.p-empty {
+  padding: 8px;
+  color: var(--c-paper-empty);
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+/* --------------------------------------------------------------------------
+   7. PRINT
+   -------------------------------------------------------------------------- */
+@page { size: A4; margin: 8mm; }
+
+@media print {
+  html, body       { height: auto; background: #fff; }
+  .app             { height: auto; display: block; }
+  .topbar,
+  .sidebar         { display: none !important; }
+  .body            { display: block; }
+  .preview         { padding: 0; background: #fff; overflow: visible; }
+  .sheet           { width: auto; min-height: 0; margin: 0; box-shadow: none; border-radius: 0; }
+  .sheet-inner     { padding: 6mm 5mm; min-height: 0; }
+
+  /* Pagination control for the browser + html2pdf */
+  .q-table         { break-inside: auto; }
+  .q-table tr      { break-inside: avoid; }
+  .q-table thead   { display: table-header-group; }
+  .p-inst          { break-inside: avoid; }
+  .p-fill          { break-inside: avoid; }
+
+  /* Preserve logo & watermark colours exactly */
+  .p-logo,
+  .p-watermark {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

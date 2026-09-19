@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="Generate exam question papers from Excel/CSV and export to PDF.">
+<meta name="color-scheme" content="light dark">
+<title>Question Paper Generator</title>
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="styles.css">
+
+<!-- defer: off critical path, guaranteed execution order -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script defer src="app.js"></script>
+</head><body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">📝 Question Paper Generator</div>
+    <div class="actions">
+      <span class="status" id="status">No data loaded</span>
+      <button class="btn" id="btnDownload">⬇ Download PDF</button>
+      <button class="btn ghost" id="btnPrint">Print / Save PDF</button>
+    </div>
+  </header>
+
+  <div class="body">
+    <aside class="sidebar">
+
+      <div class="card">
+        <h3>Watermark</h3>
+        <label class="chk"><input type="checkbox" id="wmShow" checked> Show school-name watermark</label>
+        <label class="chk"><input type="checkbox" id="wmUseSchool" checked> Use school name as watermark</label>
+        <label>Custom text (if not using school name)
+          <input id="wmText" placeholder="e.g. DPS — CONFIDENTIAL">
+        </label>
+        <label>Opacity — <span id="wmOpVal">55</span>%
+          <input type="range" id="wmOpacity" min="10" max="90" step="1" value="55">
+        </label>
+        <p class="hint">Diagonal, light-grey, centred on the sheet. Renders <b>behind</b> all content.</p>
+      </div>
+
+      <div class="card">
+        <h3>Logo · Left side</h3>
+        <label class="chk"><input type="checkbox" id="logoShow" checked> Show logo on paper</label>
+        <input type="file" id="logoFile" accept="image/png,image/jpeg,image/svg+xml,image/webp">
+        <p class="hint">PNG, JPG or SVG. Anchored to the <b>top-left</b> and scales without distortion.</p>
+        <label>Scale — <span id="logoWVal">22</span> mm
+          <input type="range" id="logoWidth" min="10" max="45" step="1" value="22">
+        </label>
+        <button class="btn small ghost" id="logoReset">Use default emblem</button>
+      </div>
+
+      <div class="card">
+        <h3>Paper Details</h3>
+        <label>School / Institute<input id="mSchool"></label>
+        <label>Examination<input id="mExam"></label>
+        <div class="row">
+          <label>Class<input id="mCls"></label>
+          <label>Subject<input id="mSubject"></label>
+        </div>
+        <div class="row">
+          <label>Time<input id="mTime"></label>
+          <label>Max. Marks<input id="mMax"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Student Details Row</h3>
+        <label class="chk"><input type="checkbox" id="showFill" checked> Show fill-in row on paper</label>
+        <label class="chk"><input type="checkbox" id="fillDate" checked> Include Date field</label>
+        <p class="hint">Renders under the header as <b>Name: ______  Div: ____  Roll No.: ____</b> with the Date on the next line.</p>
+      </div>
+
+      <div class="card">
+        <h3>General Instructions</h3>
+        <label class="chk"><input type="checkbox" id="showInst" checked> Show on paper</label>
+        <textarea id="mInst" rows="9"></textarea>
+        <p class="hint">One instruction per line. Leading numbers are stripped automatically.</p>
+      </div>
+
+      <div class="card">
+        <h3>Question Data · Excel / CSV</h3>
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+        <p class="hint">Sheet columns: <b>Qno</b> · <b>Question</b> · <b>Marks</b> (optional <b>Section</b>).
+          Inside a cell, put <b>OR</b> on its own line to create an internal choice.</p>
+        <textarea id="pasteArea" rows="5" placeholder="…or paste rows straight from Excel (Qno → Question → Marks)"></textarea>
+        <div class="row gap-top">
+          <button class="btn small" id="btnPaste">Load Pasted Data</button>
+          <button class="btn small ghost" id="btnClear">Clear</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Sections</h3>
+        <div class="row gap-bottom">
+          <button class="btn small" id="btnAuto">Auto-detect</button>
+          <button class="btn small ghost" id="btnAddSec">+ Add Section</button>
+        </div>
+        <div id="sectionsList"></div>
+      </div>
+
+      <div class="card">
+        <h3>Layout</h3>
+        <label>Base font size — <span id="fsVal">13</span> px
+          <input type="range" id="fontSize" min="10" max="18" step="0.5" value="13">
+        </label>
+        <label class="chk"><input type="checkbox" id="showMarks" checked> Show marks column</label>
+      </div>
+
+    </aside>
+
+    <main class="preview">
+      <div class="sheet">
+        <div class="p-watermark" id="watermark" aria-hidden="true"></div>
+        <div class="sheet-inner" id="sheet"></div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

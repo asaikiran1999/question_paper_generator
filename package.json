@@ -1,0 +1,13 @@
+{
+  "name": "question-paper-generator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generate exam question papers from Excel/CSV and export to PDF.",
+  "scripts": {
+    "dev":  "npx serve public -l 3000",
+    "start":"npx serve public -l 3000"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
